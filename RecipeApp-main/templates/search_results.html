@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="results-heading">Search Results for "{{ query }}"</h2>
+
+{% if recipes %}
+  <div class="card-container">
+    {% for recipe in recipes %}
+      <div class="recipe-card">
+        <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+        <div class="card-content">
+          <h3>{{ recipe.title }}</h3>
+          <p><strong>Ready in:</strong> {{ recipe.readyInMinutes }} minutes</p>
+
+          {% if recipe.sourceUrl %}
+            <a class="view-button" href="{{ recipe.sourceUrl }}" >View Full Recipe</a>
+          {% endif %}
+
+           <!-- Show QR section only if logged in -->
+          {% if session.get('user_name') %}
+            <!-- External Food App Order Section -->
+<!-- External Order Dropdown -->
+<div class="external-order-section">
+  <p><strong>Order This Recipe from:</strong></p>
+  <div class="dropdown">
+    <button class="dropbtn">Choose App</button>
+    <div class="dropdown-content">
+      <a href="https://www.swiggy.com/" target="_blank">Swiggy</a>
+      <a href="https://www.zomato.com/" target="_blank">Zomato</a>
+      <a href="https://www.ubereats.com/" target="_blank">UberEats</a>
+    </div>
+  </div>
+</div>
+
+
+          {% else %}
+            <p class="login-warning">🔒 <a href="{{ url_for('login') }}">Login</a> to place your order.</p>
+          {% endif %}
+          
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="no-results">No recipes found.</p>
+{% endif %}
+{% endblock %}

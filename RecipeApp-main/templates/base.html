@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Recipe App</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <div class="overlay">
+
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="logo">
+        <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="FlavorFiesta Logo">
+        <span>FlavorFiesta</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+        
+        <!-- Static Welcome Message -->
+       
+
+        {% if session.get('user_name') %}
+          <li><a href="/logout">Logout</a></li>
+        {% else %}
+          <li><a href="/login">Login</a></li>
+          <li><a href="/register">Register</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Page Content -->
+    {% block content %}{% endblock %}
+
+  </div>
+  
+
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Recipe App. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

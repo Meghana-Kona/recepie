@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FlavorFiesta</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+    
+<div class="overlay">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="FlavorFiesta Logo">
+      <span>FlavorFiesta</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/contact">Contact</a></li>
+
+      {% if session.get('user_name') %}
+        <li>Hello,{{ session['user_name'] }}</li>
+        <li><a href="/logout">Logout</a></li>
+      {% else %}
+        <li><a href="/login">Login</a></li>
+        <li><a href="/register">Register</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+
+  <!-- Header Section -->
+  <header class="main-header">
+    <h1>Welcome to FlavorFiesta</h1>
+    <p>Explore recipes by your mood or cravings</p>
+  </header>
+<form action="/search" method="get" class="search-bar">
+  <input type="text" name="query" placeholder="Search recipes..." required>
+  <button type="submit">Search</button>
+</form>
+
+
+  <!-- Recipe Cards -->
+  <section class="card-slider">
+    <div class="card-container">
+
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/coffee.jpg') }}" alt="Coffee">
+        <div class="card-info">
+          <h3>Coffee</h3>
+          <pre>Boost your day with freshly brewed aromatic coffee!</pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/biryani.jpg') }}" alt="Biryani">
+        <div class="card-info">
+          <h3>Biryani</h3>
+          <pre>Delicious layers of rice, spices and love in every bite.</pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/icecream.jpg') }}" alt="Ice Cream">
+        <div class="card-info">
+          <h3>Ice Cream</h3>
+          <pre>Cool down with creamy scoops of happiness.</pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/pickles.jpg') }}" alt="Pickles">
+        <div class="card-info">
+          <h3>Pickles</h3>
+          <pre>A tangy twist that elevates any meal.</pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/drinks.jpg') }}" alt="Drinks">
+        <div class="card-info">
+          <h3>Drinks</h3>
+          <pre>Refreshing sips to boost your mood and energy anytime.</pre>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="{{ url_for('static', filename='images/dessert.jpg') }}" alt="Desserts">
+        <div class="card-info">
+          <h3>Desserts</h3>
+          <pre>Indulge your sweet cravings with our best delights.</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feedback Section -->
+  <section class="feedback-section">
+    <h2>User Feedback</h2>
+    <div class="feedback-cards">
+      <div class="feedback-card">
+        <p>"FlavorFiesta has completely changed the way I cook! Easy recipes and such tasty results."</p>
+        <span>- Meghana</span>
+      </div>
+      <div class="feedback-card">
+        <p>"I love the mood-based search! Helps me decide what to eat when I’m confused."</p>
+        <span>- Moksha</span>
+      </div>
+      <div class="feedback-card">
+        <p>"The layout and videos are super helpful, especially when trying something new."</p>
+        <span>- Likhitha</span>
+      </div>
+    </div>
+  </section>
+
+
+<!-- Search Section -->
+<!-- Chatbot Container -->
+<div id="chatbot-container">
+  <div id="chat-header" onclick="toggleChat()">
+    🍽️ Ask RecipeBot
+  </div>
+  <div id="chatbox" style="display: none;">
+    <div id="messages"></div>
+    <input type="text" id="userInput" placeholder="Type your message..." onkeypress="if(event.key === 'Enter') sendMessage()">
+  </div>
+</div>
+
+<script>
+function toggleChat() {
+  const chatbox = document.getElementById('chatbox');
+  chatbox.style.display = (chatbox.style.display === 'none') ? 'block' : 'none';
+}
+
+function sendMessage() {
+  const input = document.getElementById('userInput');
+  const messages = document.getElementById('messages');
+  const userText = input.value.trim();
+  if (!userText) return;
+
+  messages.innerHTML += `<div><strong>You:</strong> ${userText}</div>`;
+
+  fetch('/chatbot', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message: userText })
+  })
+  .then(res => res.json())
+  .then(data => {
+    messages.innerHTML += `<div><strong>Bot:</strong> ${data.reply}</div>`;
+    input.value = '';
+    messages.scrollTop = messages.scrollHeight;
+  });
+}
+</script>
+
+
+  
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 FlavorFiesta. All rights reserved.</p>
+  </footer>
+</div>
+<script>
+  document.getElementById("choiceSearch").addEventListener("input", function () {
+    let query = this.value.trim();
+    fetchResults(query, "choice");
+  });
+
+  document.getElementById("moodSearch").addEventListener("input", function () {
+    let query = this.value.trim();
+    fetchResults(query, "mood");
+  });
+
+  function fetchResults(query, type) {
+    if (query.length === 0) {
+      document.getElementById("results-container").innerHTML = "";
+      return;
+    }
+
+    fetch(`/search?type=${type}&query=${encodeURIComponent(query)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        const container = document.getElementById("results-container");
+        container.innerHTML = "";
+        if (data.length === 0) {
+          container.innerHTML = "<p>No recipes found.</p>";
+          return;
+        }
+
+        data.forEach((recipe) => {
+          const card = `
+            <div class="card">
+              <img src="/static/images/${recipe.image}" alt="${recipe.name}">
+              <div class="card-info">
+                <h3>${recipe.name}</h3>
+                <pre>${recipe.description}</pre>
+              </div>
+            </div>`;
+          container.innerHTML += card;
+        });
+      });
+  }
+</script>
+
+
+
+
+
+</body>
+</html>

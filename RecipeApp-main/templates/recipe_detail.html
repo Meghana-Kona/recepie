@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="recipe-detail-section">
+  <div class="recipe-card">
+
+    <!-- Header Section: Title + Image -->
+    <div class="top-section">
+      <div class="left">
+        <h2>{{ recipe.name }}</h2>
+        <p>{{ recipe.description }}</p>
+      </div>
+      <div class="right">
+        <img src="{{ url_for('static', filename='images/' + recipe.image) }}" alt="{{ recipe.name }}" style="max-width: 100%; height: auto; border-radius: 10px;">
+      </div>
+    </div>
+
+    <!-- Info Section -->
+    <div class="info-section">
+      <h3>🥗 Ingredients</h3>
+      <ul>
+        {% for i in recipe.ingredients.split(';') %}
+          <li>{{ i }}</li>
+        {% endfor %}
+      </ul>
+
+      <p><strong>🔥 Calories:</strong> {{ recipe.calories }}</p>
+
+      <h3>👩‍🍳 Cooking Steps</h3>
+      <ol>
+        {% for step in recipe.process.split(';') %}
+          <li>{{ step.strip() }}</li>
+        {% endfor %}
+      </ol>
+
+      {% if recipe.video_url %}
+      <h3>🎥 Recommended Video</h3>
+      <div class="video-container" style="margin-top: 15px;">
+        <iframe width="100%" height="315" src="{{ recipe.video_url }}" frameborder="0" allowfullscreen></iframe>
+      </div>
+      {% endif %}
+
+      <div class="order-btn-wrapper" style="margin-top: 30px;">
+        <a class="order-button" href="{{ url_for('payment', recipe_id=recipe.id) }}">🛒 Order Online</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="about-section">
+  <div class="about-container">
+    <h1>About Recipe Hub</h1>
+    <p>
+      Welcome to <strong>Recipe Hub</strong>, your trusted source for discovering unique, delicious, and easy-to-follow recipes from around the world.
+    </p>
+
+    <h2>What We Offer</h2>
+    <p>
+      Recipe Hub brings together an ever-growing collection of dishes tailored to your mood, preferences, and lifestyle. Whether you're looking for a quick snack, a weekend special, or something comforting after a long day — our smart search tools help you find exactly what you need.
+    </p>
+
+    <h2>Key Features</h2>
+    <ul>
+      <li>Search recipes based on your interest.</li>
+      <li>Step-by-step instructions and recipe process </li>
+      <li>Recipe cards include preparation time so you can plan ahead easily</li>
+      <li>Integrated ingredient ordering online</li>
+      
+      <li>Secure account access through OTP-based email verification</li>
+    </ul>
+
+    <h2>Why Choose Recipe Hub?</h2>
+    <p>
+      Our platform is designed for everyone — from curious beginners to experienced home chefs. We focus on delivering a seamless cooking discovery experience that's both inspiring and easy to use. With clean design and smart personalization, Recipe Hub makes your culinary journey enjoyable and rewarding.
+    </p>
+
+    <h2>Contact Us</h2>
+    <p>
+      Have feedback, ideas, or need help? Visit our <a href="{{ url_for('contact') }}">Contact</a> page and reach out to us. We’re always here to connect and improve.
+    </p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="otp-section">
+  <div class="otp-container">
+    <h2>Verify OTP</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('verify_otp') }}">
+      <input type="text" name="otp" placeholder="Enter the OTP sent to your email" required>
+      <button type="submit">Verify OTP</button>
+    </form>
+
+    <form method="POST" action="{{ url_for('resend_otp') }}">
+      <button type="submit" class="resend-btn">Resend OTP</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

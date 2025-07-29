@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="contact-section">
+  <div class="contact-container">
+    <h1>Contact Us</h1>
+    <form method="POST" action="{{ url_for('contact') }}">
+      <input type="text" name="name" placeholder="Name" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <textarea name="message" placeholder="Your message..." required></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
